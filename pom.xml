@@ -104,8 +104,7 @@
 
 	<developers>
 		<developer>
-			<name>DevMark</name>
-			<email>hc.devmark@gmail.com</email>
+			<name>Mark Wong</name>
 		</developer>
 	</developers>
 
@@ -113,6 +112,7 @@
 		<connection>scm:git:https://github.com/emcoo/emcoo-core.git</connection>
 		<developerConnection>scm:git:https://github.com/emcoo/emcoo-core.git</developerConnection>
 		<url>https://github.com/emcoo/emcoo-core</url>
+		<tag>master</tag>
 	</scm>
 
 	<distributionManagement>
