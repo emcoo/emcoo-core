@@ -109,6 +109,12 @@
 		</developer>
 	</developers>
 
+	<scm>
+		<connection>scm:git:https://github.com/emcoo/emcoo-core.git</connection>
+		<developerConnection>scm:git:https://github.com/emcoo/emcoo-core.git</developerConnection>
+		<url>https://github.com/emcoo/emcoo-core</url>
+	</scm>
+
 	<distributionManagement>
 		<snapshotRepository>
 			<id>center</id>
