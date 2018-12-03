@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.emcoo.ef</groupId>
 		<artifactId>emcoo-core</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 	</parent>
 
 	<artifactId>emcoo-filesystem</artifactId>
@@ -45,6 +45,11 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
 		</dependency>
 
 		<!-- Unit Test -->

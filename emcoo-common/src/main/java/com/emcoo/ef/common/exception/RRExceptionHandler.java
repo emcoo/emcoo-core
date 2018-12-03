@@ -5,6 +5,7 @@ import com.emcoo.ef.common.http.FieldErrorResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionFailedException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * Global Exception Handler
@@ -81,6 +81,11 @@ public class RRExceptionHandler {
 		errorResponse.setMessage(e.getMessage());
 
 		return ResponseEntity.badRequest().body(errorResponse);
+	}
+
+	@ExceptionHandler(NotFoundException.class)
+	public ResponseEntity handleNotFoundException(NotFoundException e) {
+		return new ResponseEntity(HttpStatus.NOT_FOUND);
 	}
 
 	/**

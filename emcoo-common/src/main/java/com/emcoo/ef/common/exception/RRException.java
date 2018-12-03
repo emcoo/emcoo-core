@@ -7,8 +7,6 @@ package com.emcoo.ef.common.exception;
  */
 public class RRException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * 错误Key，用于唯一标识错误类型
 	 */

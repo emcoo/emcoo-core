@@ -5,7 +5,7 @@
 
 	<groupId>com.emcoo.ef</groupId>
 	<artifactId>emcoo-core</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<packaging>pom</packaging>
 
 	<name>emcoo-core</name>
@@ -35,6 +35,9 @@
 		<!-- emcoo-validator -->
 		<hibernate-validator.version>6.0.11.Final</hibernate-validator.version>
 		<commons-beanutils.version>1.9.3</commons-beanutils.version>
+
+		<!-- emcoo-filesystem -->
+		<thumbnailator.version>0.4.8</thumbnailator.version>
 
 		<junit-jupiter.version>5.3.1</junit-jupiter.version>
 		<lombok.version>1.18.4</lombok.version>
@@ -71,6 +74,11 @@
 				<version>${hibernate-validator.version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>net.coobird</groupId>
+				<artifactId>thumbnailator</artifactId>
+				<version>${thumbnailator.version}</version>
+			</dependency>
 			<!-- Unit Test -->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>

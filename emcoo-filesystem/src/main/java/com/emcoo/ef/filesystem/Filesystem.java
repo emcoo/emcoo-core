@@ -1,8 +1,9 @@
 package com.emcoo.ef.filesystem;
 
-import org.springframework.http.ResponseEntity;
+import com.emcoo.ef.filesystem.resize.ResizeTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 
 /**
@@ -16,7 +17,9 @@ public interface Filesystem {
 
 	File get(String path);
 
-	ResponseEntity download(String path);
+	void download(HttpServletResponse response, String path);
+
+	void resizeAndDownload(HttpServletResponse response, String path, ResizeTemplate resizeTemplate);
 
 	StorageResponse put(String path, MultipartFile multipartFile);
 
