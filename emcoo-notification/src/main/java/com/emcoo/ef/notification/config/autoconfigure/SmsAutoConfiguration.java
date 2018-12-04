@@ -3,7 +3,6 @@ package com.emcoo.ef.notification.config.autoconfigure;
 import com.emcoo.ef.notification.SmsNotification;
 import com.emcoo.ef.notification.YunpianSmsNotification;
 import com.emcoo.ef.notification.channel.YunpianSmsChannel;
-import com.emcoo.ef.notification.config.properties.MailModelProperties;
 import com.emcoo.ef.notification.config.properties.YunpainSmsProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

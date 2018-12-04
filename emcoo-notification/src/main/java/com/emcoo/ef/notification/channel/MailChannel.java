@@ -1,6 +1,5 @@
 package com.emcoo.ef.notification.channel;
 
-import com.emcoo.ef.notification.MailChannel;
 import com.emcoo.ef.notification.config.properties.MailModelProperties;
 import com.emcoo.ef.notification.template.MailMessageTemplate;
 import org.slf4j.Logger;
@@ -8,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 import javax.mail.MessagingException;
@@ -16,13 +16,13 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 /**
- * 邮件通道实现
+ * Email Channel
  *
  * @author mark
  */
-public class DefaultMailChannel implements MailChannel {
+public class MailChannel implements com.emcoo.ef.notification.MailChannel {
 
-	private final Logger LOGGER = LoggerFactory.getLogger(DefaultMailChannel.class);
+	private final Logger LOGGER = LoggerFactory.getLogger(MailChannel.class);
 
 	MailProperties mailProperties;
 
@@ -30,14 +30,14 @@ public class DefaultMailChannel implements MailChannel {
 
 	JavaMailSender emailSender;
 
-	public DefaultMailChannel(MailProperties mailProperties, MailModelProperties mailModelProperties, JavaMailSender javaMailSender) {
+	public MailChannel(MailProperties mailProperties, MailModelProperties mailModelProperties, JavaMailSender javaMailSender) {
 		this.mailProperties = mailProperties;
 		this.mailModelProperties = mailModelProperties;
 		this.emailSender = javaMailSender;
 	}
 
 	/**
-	 * 业务处理
+	 * Send mail
 	 *
 	 * @param mailMessageTemplate
 	 */
@@ -61,13 +61,13 @@ public class DefaultMailChannel implements MailChannel {
 			}
 
 			emailSender.send(message);
-			LOGGER.info("[消息中心 - 郵件发送]完成发送");
+			LOGGER.info(String.format("[Notification] Sent email from %s to %s", mailModelProperties.getDefaultSenderAddress(), mailMessageTemplate.getTo()));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			LOGGER.error("[消息中心 - 郵件发送]发送失敗");
+			LOGGER.error("[Notification] Send email failed", e);
 		} catch (MessagingException e) {
 			e.printStackTrace();
-			LOGGER.error("[消息中心 - 郵件发送]发送失敗");
+			LOGGER.error("[Notification] Send email failed", e);
 		}
 
 		return true;

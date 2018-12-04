@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * 邮件 服务配置
+ * Email Properties
  *
  * @author mark
  */

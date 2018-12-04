@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.Map;
 
 /**
- * 云片短息 服务配置
+ * Yunpain SMS Properties
  *
  * @author mark
  */

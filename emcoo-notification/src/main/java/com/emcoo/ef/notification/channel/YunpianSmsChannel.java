@@ -13,9 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-
 /**
- * Yunpian SMS
+ * Yunpian SMS Channel
  *
  * @author mark
  */
