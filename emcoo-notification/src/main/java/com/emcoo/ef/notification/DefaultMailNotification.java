@@ -24,4 +24,3 @@ public class DefaultMailNotification implements MailNotification {
 		return this.channel.send(mailMessageTemplate);
 	}
 }
-

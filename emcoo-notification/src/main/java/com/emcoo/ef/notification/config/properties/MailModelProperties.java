@@ -13,12 +13,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class MailModelProperties {
 
 	/**
-	 * 默认发送者名称
+	 * Default Sender Name
 	 */
 	private String defaultSender;
 
 	/**
-	 * 默认发送者邮件地址
+	 * Default Sender Address
 	 */
 	private String defaultSenderAddress;
 }
