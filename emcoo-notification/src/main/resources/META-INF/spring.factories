@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.emcoo.ef.notification.config.autoconfigure.MailAutoConfiguration
+com.emcoo.ef.notification.config.autoconfigure.SmsAutoConfiguration
