@@ -142,12 +142,12 @@ public class DefaultFilesystem implements Filesystem {
 	public StorageResponse putFile(String path, MultipartFile multipartFile) {
 		String fileName = FilenameUtils.randomFilename(multipartFile.getOriginalFilename());
 
-		return this.putFileAs(FilenameUtils.getFullPath(path), multipartFile, fileName);
+		return this.putFileAs(path, multipartFile, fileName);
 	}
 
 	@Override
 	public StorageResponse putFileAs(String path, MultipartFile multipartFile, String fileName) {
-		String fullPath = Paths.get(FilenameUtils.getFullPath(path), fileName).toString();
+		String fullPath = Paths.get(path, fileName).toString();
 
 		return this.put(fullPath, multipartFile);
 	}

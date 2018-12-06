@@ -120,30 +120,35 @@ public class LocalAdapter extends AbstractAdapter implements CanOverwriteFiles {
 	}
 
 	protected StorageResponse upload(String path, InputStream is) {
-		path = Paths.get(storageProperties.getUploadPath(), path).toString();
+		String fullPath = Paths.get(storageProperties.getUploadPath(), path).toString();
 
 		StorageResponse storageResponse = new StorageResponse();
 
-		String fileName = FilenameUtils.getBaseName(path);
+		String baseName = FilenameUtils.getBaseName(path);
+		String name = FilenameUtils.getName(path);
+		String extension = FilenameUtils.getExtension(path);
 
 		try {
-			Path targetLocation = Paths.get(path);
+			Path targetLocation = Paths.get(fullPath);
 			// Create dir
 			Files.createDirectories(targetLocation.getParent());
 
 			storageResponse.setPath(path);
+			storageResponse.setFullPath(fullPath);
 			// Copy file to the target location (Replacing existing file with the same name)
 			if (is != null) {
 				Files.copy(is, targetLocation, StandardCopyOption.REPLACE_EXISTING);
 				storageResponse.setType("file");
-				storageResponse.setFileName(fileName);
+				storageResponse.setName(name);
+				storageResponse.setBaseName(baseName);
+				storageResponse.setExtension(extension);
 				storageResponse.setMimetype(FilenameUtils.getMimeType(path));
 				storageResponse.setSize(Long.valueOf(is.available()));
 			}
 		} catch (NoSuchFileException e) {
-			throw new RuntimeException("Invalid path " + fileName, e);
+			throw new RuntimeException("Invalid path " + name, e);
 		} catch (IOException e) {
-			throw new RuntimeException("Could not store file " + fileName, e);
+			throw new RuntimeException("Could not store file " + name, e);
 		}
 		return storageResponse;
 	}

@@ -14,13 +14,24 @@ import java.io.InputStream;
 @Setter
 public class StorageResponse {
 
-	String fileName;
+	// filename with ext
+	String name;
+
+	// without ext
+	String baseName;
+
+	// ext, e.g.: jpg, png
+	String extension;
 
 	String originalFilename;
 
+	// file / dir
 	String type;
 
+	// fullpath
 	String path;
+
+	String fullPath;
 
 	Long size;
 
