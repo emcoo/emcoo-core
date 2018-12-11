@@ -118,7 +118,14 @@ public class DefaultFilesystem implements Filesystem {
 				if (resizeTemplate.getQuality() != 0) {
 					thumb.outputQuality(resizeTemplate.getQuality());
 				}
-				thumb.toOutputStream(response.getOutputStream());
+
+				String contentType = FilenameUtils.getMimeType(path);
+				OutputStream outputStream = response.getOutputStream();
+
+				response.setContentType(contentType);
+				thumb.toOutputStream(outputStream);
+
+				fileInputStream.close();
 			} catch (IllegalArgumentException e) {
 				this.download(response, path);
 				return;
