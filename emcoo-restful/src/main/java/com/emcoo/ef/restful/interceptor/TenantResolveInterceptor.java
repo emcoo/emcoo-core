@@ -30,8 +30,11 @@ public class TenantResolveInterceptor extends HandlerInterceptorAdapter {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		String tenantId = request.getHeader(TENANT_HEADER_KEY);
+		if (!(handler instanceof HandlerMethod)) {
+			return super.preHandle(request, response, handler);
+		}
 
+		String tenantId = request.getHeader(TENANT_HEADER_KEY);
 		// restrict the access
 		HandlerMethod method = (HandlerMethod) handler;
 		TenantResource tenantResource = method.getMethodAnnotation(TenantResource.class);
@@ -69,7 +72,6 @@ public class TenantResolveInterceptor extends HandlerInterceptorAdapter {
 		if ((rootResource != null || isRootResource) && tenantId != null) {
 			throw new NoHandlerFoundException(request.getMethod(), request.getRequestURI(), null);
 		}
-
 
 		return super.preHandle(request, response, handler);
 	}
