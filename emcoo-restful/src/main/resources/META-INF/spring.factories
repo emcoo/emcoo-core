@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.emcoo.ef.restful.config.autoconfigure.TenantAutoConfiguration
+com.emcoo.ef.restful.service.TenantAcl

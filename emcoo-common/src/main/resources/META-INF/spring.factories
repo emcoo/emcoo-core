@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.emcoo.ef.common.config.autoconfigure.CommonAutoConfiguration
