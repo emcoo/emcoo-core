@@ -56,8 +56,8 @@ public class DefaultFilesystem implements Filesystem {
 	public void download(HttpServletResponse response, String path) {
 		path = FilenameUtils.normalize(path);
 
-		FileInputStream fileInputStream = this.getAdapter().readStream(path);
-		if (fileInputStream == null) {
+		InputStream inputStream = this.getAdapter().readStream(path);
+		if (inputStream == null) {
 			throw new ResourceNotFoundException();
 		}
 
@@ -70,9 +70,9 @@ public class DefaultFilesystem implements Filesystem {
 			OutputStream outputStream = response.getOutputStream();
 
 			response.setContentType(contentType);
-			IOUtils.copy(fileInputStream, outputStream);
+			IOUtils.copy(inputStream, outputStream);
 
-			fileInputStream.close();
+			inputStream.close();
 		} catch (IOException e) {
 			throw new ResourceNotFoundException();
 		}
@@ -88,8 +88,8 @@ public class DefaultFilesystem implements Filesystem {
 			throw new NotFoundException();
 		}
 
-		FileInputStream fileInputStream = this.getAdapter().readStream(path);
-		if (fileInputStream == null) {
+		InputStream inputStream = this.getAdapter().readStream(path);
+		if (inputStream == null) {
 			throw new NotFoundException();
 		}
 
@@ -105,7 +105,7 @@ public class DefaultFilesystem implements Filesystem {
 		}
 
 		try {
-			Thumbnails.Builder thumb = Thumbnails.of(fileInputStream);
+			Thumbnails.Builder thumb = Thumbnails.of(inputStream);
 
 			try {
 				if (resizeTemplate.getWidth() != 0 && resizeTemplate.getHeight() != 0) {
@@ -125,7 +125,7 @@ public class DefaultFilesystem implements Filesystem {
 				response.setContentType(contentType);
 				thumb.toOutputStream(outputStream);
 
-				fileInputStream.close();
+				inputStream.close();
 			} catch (IllegalArgumentException e) {
 				this.download(response, path);
 				return;

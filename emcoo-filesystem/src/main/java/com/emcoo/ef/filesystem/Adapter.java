@@ -17,7 +17,7 @@ public interface Adapter {
 
 	File read(String path);
 
-	FileInputStream readStream(String path);
+	InputStream readStream(String path);
 
 	StorageResponse write(String path, MultipartFile multipartFile);
 
