@@ -10,8 +10,10 @@ import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.exception.CosClientException;
 import com.qcloud.cos.exception.CosServiceException;
+import com.qcloud.cos.exception.MultiObjectDeleteException;
 import com.qcloud.cos.model.*;
 import com.qcloud.cos.region.Region;
+import com.qcloud.cos.model.DeleteObjectsRequest;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -19,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Tencent COS Storage Adapter
@@ -200,12 +204,67 @@ public class TencentCosAdapter extends AbstractAdapter {
 
 	@Override
 	public Boolean deleteDir(String path) {
-		return null;
+		String bucketName = tencentCosStorageProperties.getBucketName();
+		COSClient cosclient = this.getCosClient();
+
+		ListObjectsRequest listObjectsRequest = new ListObjectsRequest();
+		// 设置bucket名称
+		listObjectsRequest.setBucketName(bucketName);
+		// prefix表示列出的object的key以prefix开始
+		listObjectsRequest.setPrefix(path);
+		// deliter表示分隔符, 设置为/表示列出当前目录下的object, 设置为空表示列出所有的object
+		listObjectsRequest.setDelimiter("");
+		// 设置最大遍历出多少个对象, 一次listobject最大支持1000
+		listObjectsRequest.setMaxKeys(1000);
+		ObjectListing objectListing = null;
+		do {
+			try {
+				objectListing = cosclient.listObjects(listObjectsRequest);
+
+				// common prefix表示表示被delimiter截断的路径, 如delimter设置为/, common prefix则表示所有子目录的路径
+				List<String> commonPrefixs = objectListing.getCommonPrefixes();
+
+				DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucketName);
+
+				ArrayList<DeleteObjectsRequest.KeyVersion> keyList = new ArrayList<>();
+				// 列出的object列表
+				List<COSObjectSummary> cosObjectSummaries = objectListing.getObjectSummaries();
+				for (COSObjectSummary cosObjectSummary : cosObjectSummaries) {
+					keyList.add(new DeleteObjectsRequest.KeyVersion(cosObjectSummary.getKey()));
+				}
+				deleteObjectsRequest.setKeys(keyList);
+				// 批量删除文件
+				DeleteObjectsResult deleteObjectsResult = cosclient.deleteObjects(deleteObjectsRequest);
+				List<DeleteObjectsResult.DeletedObject> deleteObjectResultArray = deleteObjectsResult.getDeletedObjects();
+			} catch (MultiObjectDeleteException mde) { // 部分产出成功部分失败
+				List<DeleteObjectsResult.DeletedObject> deleteObjects = mde.getDeletedObjects();
+				List<MultiObjectDeleteException.DeleteError> deleteErrors = mde.getErrors();
+				LOGGER.error("Delete failed: Caught an CosServiceException, which means your request made it to COS, but was rejected with an error response for some reason.");
+				LOGGER.debug("Error Code: " + mde.getErrorCode());
+				LOGGER.debug("Error Message: " + mde.getMessage());
+				return false;
+			} catch (CosServiceException e) {
+				LOGGER.error("Delete failed: Caught an CosServiceException, which means your request made it to COS, but was rejected with an error response for some reason.");
+				LOGGER.debug("Error Code: " + e.getErrorCode());
+				LOGGER.debug("Error Message: " + e.getMessage());
+				return false;
+			} catch (CosClientException e) {
+				LOGGER.error("Delete failed: Caught an CosClientException, which means your request made it to COS, but was rejected with an error response for some reason.");
+				LOGGER.debug("Error Message: " + e.getMessage());
+				return false;
+			}
+
+			String nextMarker = objectListing.getNextMarker();
+			listObjectsRequest.setMarker(nextMarker);
+		} while (objectListing.isTruncated());
+
+		cosclient.shutdown();
+		return true;
 	}
 
 	@Override
 	public Boolean createDir(String path) {
-		return null;
+		return true;
 	}
 }
 
