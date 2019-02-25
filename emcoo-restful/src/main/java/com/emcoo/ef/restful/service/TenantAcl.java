@@ -2,6 +2,7 @@ package com.emcoo.ef.restful.service;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +22,7 @@ import java.util.Set;
  * @author mark
  */
 @Component
+@Scope("prototype")
 public class TenantAcl {
 
 	@Autowired
@@ -28,6 +30,8 @@ public class TenantAcl {
 
 	private String defaultRolePrefix = "ROLE_";
 	private String defaultPermissionPrefix = "OP_";
+	private String defaultSplit = "_";
+
 	protected Authentication authentication;
 	protected String tenantId;
 	private Set<String> roles;
@@ -35,10 +39,14 @@ public class TenantAcl {
 
 	public void init() {
 		this.authentication = SecurityContextHolder.getContext().getAuthentication();
-		this.tenantId = this.getTenantId();
+		this.tenantId = this.fetchTenantId();
 	}
 
-	private String getTenantId() {
+	public String getTenantId() {
+		return tenantId;
+	}
+
+	private String fetchTenantId() {
 		try {
 			return BeanUtils.getProperty(request.getAttribute("tenant"), "id");
 		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | NullPointerException e) {
@@ -92,11 +100,11 @@ public class TenantAcl {
 		return this.roles;
 	}
 
-	private static String getRoleWithDefaultPrefix(String defaultRolePrefix, String role) {
+	private String getRoleWithDefaultPrefix(String defaultRolePrefix, String role) {
 		if (role == null) {
 			return role;
 		} else if (defaultRolePrefix != null && defaultRolePrefix.length() != 0) {
-			return role.startsWith(defaultRolePrefix) ? role : defaultRolePrefix + role;
+			return role.startsWith(defaultRolePrefix) ? role : defaultRolePrefix + this.getTenantId() + this.defaultSplit + role;
 		} else {
 			return role;
 		}

@@ -111,6 +111,10 @@ public class TencentCosAdapter extends AbstractAdapter {
 		COSClient cosclient = this.getCosClient();
 		StorageResponse storageResponse = new StorageResponse();
 
+		String baseName = FilenameUtils.getBaseName(path);
+		String name = FilenameUtils.getName(path);
+		String extension = FilenameUtils.getExtension(path);
+
 		try {
 			// Object's Metadata
 			ObjectMetadata metadata = new ObjectMetadata();
@@ -130,6 +134,9 @@ public class TencentCosAdapter extends AbstractAdapter {
 			String etag = putObjectResult.getETag();
 
 			storageResponse.setType("file");
+			storageResponse.setName(name);
+			storageResponse.setBaseName(baseName);
+			storageResponse.setExtension(extension);
 			storageResponse.setMimetype(metadata.getContentType());
 			storageResponse.setSize(metadata.getContentLength());
 			storageResponse.setPath(path);

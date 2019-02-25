@@ -1,8 +1,7 @@
 package com.emcoo.ef.filesystem.utils;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.net.URLConnection;
 import java.util.UUID;
 
 /**
@@ -22,17 +21,12 @@ public class FilenameUtils extends org.apache.commons.io.FilenameUtils {
 	}
 
 	public static String getMimeType(File file) {
-		try {
-			Path path = file.toPath();
-			return Files.probeContentType(path);
-		} catch (Exception e) {
-			return null;
-		}
+		return URLConnection.guessContentTypeFromName(file.getName());
 	}
 
 	public static String getMimeType(String filename) {
 		File file = new File(filename);
-		return FilenameUtils.getMimeType(file);
+		return getMimeType(file);
 	}
 
 }
